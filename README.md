@@ -1,4 +1,6 @@
-# Travail pratique 1: Dessiner sur un canevas ASCII"
+---
+title: "Travail pratique 1: Dessiner sur un canevas ASCII"
+---
 
 ## Format Markdown (supprimer cette section avant la remise)
 
@@ -83,7 +85,7 @@ remise, vous pouvez supprimer ce paragraphe).
   dépôt](https://gitlab.info.uqam.ca/inf3135-ete2020/inf3135-ete2020-tp1)
   (Pénalité de **50%**).
 * [x] Le dépôt GitLab est privé (Pénalité de **50%**).
-* [ ] Le dépôt contient au moins un fichier `.gitignore`.
+* [x] Le dépôt contient au moins un fichier `.gitignore`.
 * [ ] Le fichier `Makefile` permet de compiler le projet lorsqu'on entre
   `make`. Il supporte les cibles `html`, `test` et `clean`.
 * [ ] Le nombre de tests qui réussissent/échouent avec la `make test` est
