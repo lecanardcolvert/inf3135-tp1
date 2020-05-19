@@ -1,6 +1,4 @@
----
-title: "Travail pratique 1: Dessiner sur un canevas ASCII"
----
+# Travail pratique 1: Dessiner sur un canevas ASCII"
 
 ## Format Markdown (supprimer cette section avant la remise)
 
@@ -40,12 +38,7 @@ Aussi, insérer un lien vers le [sujet du travail](sujet.md).
 
 ## Auteur
 
-Indiquez ici votre prénom et nom, puis votre code permanent entre parenthèses,
-sans mettre en gras ou en italique.
-
-Par exemple,
-
-Alexandre Blondin Massé (BLOA12345678)
+Alexandre Hamel Bourdeau (HAMA12128907)
 
 ## Fonctionnement
 
