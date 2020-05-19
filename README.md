@@ -79,17 +79,17 @@ Indiquez toutes les tâches qui ont été complétés en insérant un `X` entre 
 crochets. Si une tâche n'a pas été complétée, expliquez pourquoi (lors de la
 remise, vous pouvez supprimer ce paragraphe).
 
-* [ ] Le nom du dépôt GitLab est exactement `inf3135-ete2020-tp1` (Pénalité de
+* [x] Le nom du dépôt GitLab est exactement `inf3135-ete2020-tp1` (Pénalité de
   **50%**).
-* [ ] L'URL du dépôt GitLab est exactement (remplacer `utilisateur` par votre
+* [x] L'URL du dépôt GitLab est exactement (remplacer `utilisateur` par votre
   nom identifiant GitLab) `https://gitlab.info.uqam.ca/utilisateur/inf3135-ete2020-tp1`
   (Pénalité de **50%**).
-* [ ] L'utilisateur `blondin_al` a accès au projet en mode *Developer*
+* [x] L'utilisateur `blondin_al` a accès au projet en mode *Developer*
   (Pénalité de **50%**).
-* [ ] Le dépôt GitLab est un *fork* de [ce
+* [x] Le dépôt GitLab est un *fork* de [ce
   dépôt](https://gitlab.info.uqam.ca/inf3135-ete2020/inf3135-ete2020-tp1)
   (Pénalité de **50%**).
-* [ ] Le dépôt GitLab est privé (Pénalité de **50%**).
+* [x] Le dépôt GitLab est privé (Pénalité de **50%**).
 * [ ] Le dépôt contient au moins un fichier `.gitignore`.
 * [ ] Le fichier `Makefile` permet de compiler le projet lorsqu'on entre
   `make`. Il supporte les cibles `html`, `test` et `clean`.
