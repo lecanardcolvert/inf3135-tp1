@@ -466,8 +466,9 @@ are limited to at most 40 rows and at most 80 columns.\n\
 If no argument is provided, the program prints this help and exit.\n\
 \n\
 Canvas options:\n\
-  -n HEIGHT,WIDTH           Creates a new empty canvas of HEIGHT rows\n\
-                            and WIDTH columns. Must be used as first option.\n\
+  -n HEIGHT,WIDTH           Creates a new empty canvas of HEIGHT rows and\n\
+                            WIDTH columns. Should be used as first option,\n\
+                            otherwise, the behavior is undefined.\n\
                             Ignores stdin.\n\
   -s                        Shows the canvas and exit.\n\
   -k                        Enables colored output. Replaces characters\n\
