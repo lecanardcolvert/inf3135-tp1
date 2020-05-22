@@ -71,8 +71,9 @@ are limited to at most 40 rows and at most 80 columns.
 If no argument is provided, the program prints this help and exit.
 
 Canvas options:
-  -n HEIGHT,WIDTH           Creates a new empty canvas of HEIGHT rows
-                            and WIDTH columns. Must be used as first option.
+  -n HEIGHT,WIDTH           Creates a new empty canvas of HEIGHT rows and
+                            WIDTH columns. Should be used as first option,
+                            otherwise, the behavior is undefined.
                             Ignores stdin.
   -s                        Shows the canvas and exit.
   -k                        Enables colored output. Replaces characters
