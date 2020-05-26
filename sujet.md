@@ -176,7 +176,7 @@ $ echo $?
 
 ### Option `-v`: tracé d'une ligne verticale
 
-L'option `-h` permet de tracer une ligne verticale occupant la haute de tout le
+L'option `-v` permet de tracer une ligne verticale occupant la haute de tout le
 canevas:
 
 ```sh
