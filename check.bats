@@ -11,7 +11,7 @@ help_first_line="Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]"
     [ "${lines[0]}" = "$help_first_line" ]
 }
 
-@test "Creating an empty 5x8 canvas" {
+@test "Creating an empty 3x2 canvas" {
     skip
     run ./$prog -n 3,2
     [ "${lines[0]}" = ".." ]
