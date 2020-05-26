@@ -160,6 +160,20 @@ $ ./canvascii -n 3,7 -h 1
 .......
 ```
 
+Si le numéro de ligne est hors canevas, un message d'erreur est affiché et le
+manuel d'utilisation est rappelé:
+
+```sh
+$ ./canvascii -n 3,5 -h 6
+Error: incorrect value with option -h
+Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]
+          [-h ROW] [-v COL] [-r ROW,COL,HEIGHT,WIDTH]
+          [-l ROW1,COL1,ROW2,COL2] [-c ROW,COL,RADIUS]
+[...]
+$ echo $?
+7
+```
+
 ### Option `-v`: tracé d'une ligne verticale
 
 L'option `-h` permet de tracer une ligne verticale occupant la haute de tout le
@@ -170,6 +184,20 @@ $ ./canvascii -n 3,7 -v 1 -v 3 -v 5
 .7.7.7.
 .7.7.7.
 .7.7.7.
+```
+
+Comme pour l'option `-h`, si le numéro de colonne est hors canevas, un message
+d'erreur est affiché et le manuel d'utilisation est rappelé:
+
+```sh
+$ ./canvascii -n 3,5 -v 5
+Error: incorrect value with option -v
+Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]
+          [-h ROW] [-v COL] [-r ROW,COL,HEIGHT,WIDTH]
+          [-l ROW1,COL1,ROW2,COL2] [-c ROW,COL,RADIUS]
+[...]
+$ echo $?
+7
 ```
 
 ### Option `-r`: tracé d'un rectangle
