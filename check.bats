@@ -218,6 +218,22 @@ help_first_line="Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]"
     [ "${lines[1]}" = "$help_first_line" ]
 }
 
+@test "Wrong value with option -h" {
+    skip
+    run ./$prog -n 3,5 -h 6
+    [ "$status" -eq 7 ]
+    [ "${lines[0]}" = "Error: incorrect value with option -h" ]
+    [ "${lines[1]}" = "$help_first_line" ]
+}
+
+@test "Wrong value with option -v" {
+    skip
+    run ./$prog -n 3,5 -v 5
+    [ "$status" -eq 7 ]
+    [ "${lines[0]}" = "Error: incorrect value with option -v" ]
+    [ "${lines[1]}" = "$help_first_line" ]
+}
+
 @test "Wrong syntax with option -n" {
     skip
     run ./$prog -n 5x5
