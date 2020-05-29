@@ -132,9 +132,9 @@ help_first_line="Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]"
 
 }
 
-@test "Clipping line from (3,3) to (7,4)" {
+@test "Clipping line from (1,1) to (5,8)" {
     skip
-    run ./$prog -n 5,5 -l 1,1,4,7
+    run ./$prog -n 5,5 -l 1,1,5,8
     [ "$status" -eq 0 ]
     [ "${lines[0]}" = "....." ]
     [ "${lines[1]}" = ".7..." ]
