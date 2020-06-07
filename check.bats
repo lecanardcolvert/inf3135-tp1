@@ -251,6 +251,7 @@ help_first_line="Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]"
 }
 
 @test "Negative dimensions with option -r" {
+    skip
     run ./$prog -n 5,10 -r 2,8,-3,5
     [ "$status" -eq 7 ]
     [ "${lines[0]}" = "Error: incorrect value with option -r" ]
