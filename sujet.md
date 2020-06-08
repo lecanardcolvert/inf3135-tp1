@@ -225,6 +225,28 @@ $ ./canvascii -n 5,7 -r 1,1,8,8
 .7.....
 ```
 
+Les positions peuvent être négatives:
+
+```sh
+$ ./canvascii -n 5,5 -r -1,-1,3,3
+.7...
+77...
+.....
+.....
+.....
+```
+
+Mais pas les dimensions:
+
+```sh
+$ ./canvascii -n 5,5 -r 1,1,-2,-2
+Error: incorrect value with option -r
+Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]
+          [-h ROW] [-v COL] [-r ROW,COL,HEIGHT,WIDTH]
+          [-l ROW1,COL1,ROW2,COL2] [-c ROW,COL,RADIUS]
+[...]
+```
+
 ### Option `-l`: tracé d'un segment
 
 Il est possible de tracer un segment discret avec l'option `-l`:
@@ -247,6 +269,17 @@ $ ./canvascii -n 4,10 -l 1,1,4,11
 .77.......
 ...777....
 ......7777
+```
+
+Les positions avec des valeurs négatives sont acceptées:
+
+```sh
+$ ./canvascii -n 5,5 -l -2,6,6,-2
+....7
+...7.
+..7..
+.7...
+7....
 ```
 
 L'algorithme utilisé pour tracer un segment discret est appelé [Algorithme de
@@ -285,6 +318,28 @@ $ ./canvascii -n 5,5 -c 4,4,3
 ..7..
 .7...
 .7...
+```
+
+Le centre du cercle peut avoir des coordonnées négatives:
+
+```sh
+$ ./canvascii -n 5,5 -c -1,-1,5
+....7
+....7
+...7.
+..7..
+77...
+```
+
+Mais pas son rayon:
+
+```sh
+$ ./canvascii -n 5,5 -c 1,1,-2
+Error: incorrect value with option -c
+Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]
+          [-h ROW] [-v COL] [-r ROW,COL,HEIGHT,WIDTH]
+          [-l ROW1,COL1,ROW2,COL2] [-c ROW,COL,RADIUS]
+[...]
 ```
 
 L'algorithme utilisé pour tracer un cercle discret est appelé [Algorithme de
