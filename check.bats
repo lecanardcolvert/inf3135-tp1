@@ -250,10 +250,69 @@ help_first_line="Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]"
     [ "${lines[1]}" = "$help_first_line" ]
 }
 
-@test "Negative dimensions with option -r" {
+# Negative values
+
+@test "Negative value with option -h is forbidden" {
+    skip
+    run ./$prog -n 5,10 -h -1
+    [ "$status" -eq 7 ]
+    [ "${lines[0]}" = "Error: incorrect value with option -h" ]
+    [ "${lines[1]}" = "$help_first_line" ]
+}
+
+@test "Negative value with option -v is forbidden" {
+    skip
+    run ./$prog -n 5,10 -v -1
+    [ "$status" -eq 7 ]
+    [ "${lines[0]}" = "Error: incorrect value with option -v" ]
+    [ "${lines[1]}" = "$help_first_line" ]
+}
+
+@test "Negative positions with option -r are allowed" {
+    skip
+    run ./$prog -n 5,10 -r -1,-1,4,4
+    [ "$status" -eq 0 ]
+    [ "${lines[0]}" = "..7......." ]
+    [ "${lines[1]}" = "..7......." ]
+    [ "${lines[2]}" = "777......." ]
+    [ "${lines[3]}" = ".........." ]
+    [ "${lines[4]}" = ".........." ]
+}
+
+@test "Negative dimensions with option -r are forbidden" {
     skip
     run ./$prog -n 5,10 -r 2,8,-3,5
     [ "$status" -eq 7 ]
     [ "${lines[0]}" = "Error: incorrect value with option -r" ]
+    [ "${lines[1]}" = "$help_first_line" ]
+}
+
+@test "Negative positions with option -l are allowed" {
+    skip
+    run ./$prog -n 5,5 -l -1,-1,6,6
+    [ "$status" -eq 0 ]
+    [ "${lines[0]}" = "7...." ]
+    [ "${lines[1]}" = ".7..." ]
+    [ "${lines[2]}" = "..7.." ]
+    [ "${lines[3]}" = "...7." ]
+    [ "${lines[4]}" = "....7" ]
+}
+
+@test "Negative positions with option -c are allowed" {
+    skip
+    run ./$prog -n 5,5 -c -1,-1,5
+    [ "$status" -eq 0 ]
+    [ "${lines[0]}" = "....7" ]
+    [ "${lines[1]}" = "....7" ]
+    [ "${lines[2]}" = "...7." ]
+    [ "${lines[3]}" = "..7.." ]
+    [ "${lines[4]}" = "77..." ]
+}
+
+@test "Negative radius with option -c is forbidden" {
+    skip
+    run ./$prog -n 5,5 -c 1,1,-3
+    [ "$status" -eq 7 ]
+    [ "${lines[0]}" = "Error: incorrect value with option -c" ]
     [ "${lines[1]}" = "$help_first_line" ]
 }
