@@ -629,14 +629,14 @@ apporter des précisions à l'ensemble de la classe si nécessaire.
 
 Les critères d'évaluation sont les suivants:
 
-  Critère                Points
-  -------------------- --------
-  Fonctionnabilité          /50
-  Qualité du code           /15
-  Documentation             /15
-  Makefile                   /5
-  Utilisation de Git        /15
-  Total                    /100
+| Critère             |  Points |
+|:--------------------|--------:|
+| Fonctionnabilité    |     /50 |
+| Qualité du code     |     /15 |
+| Documentation       |     /15 |
+| Makefile            |      /5 |
+| Utilisation de Git  |     /15 |
+| Total               |    /100 |
 
 Plus précisément, les éléments suivants seront pris en compte:
 
