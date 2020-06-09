@@ -71,8 +71,9 @@ are limited to at most 40 rows and at most 80 columns.
 If no argument is provided, the program prints this help and exit.
 
 Canvas options:
-  -n HEIGHT,WIDTH           Creates a new empty canvas of HEIGHT rows
-                            and WIDTH columns. Must be used as first option.
+  -n HEIGHT,WIDTH           Creates a new empty canvas of HEIGHT rows and
+                            WIDTH columns. Should be used as first option,
+                            otherwise, the behavior is undefined.
                             Ignores stdin.
   -s                        Shows the canvas and exit.
   -k                        Enables colored output. Replaces characters
@@ -159,9 +160,23 @@ $ ./canvascii -n 3,7 -h 1
 .......
 ```
 
+Si le numéro de ligne est hors canevas, un message d'erreur est affiché et le
+manuel d'utilisation est rappelé:
+
+```sh
+$ ./canvascii -n 3,5 -h 6
+Error: incorrect value with option -h
+Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]
+          [-h ROW] [-v COL] [-r ROW,COL,HEIGHT,WIDTH]
+          [-l ROW1,COL1,ROW2,COL2] [-c ROW,COL,RADIUS]
+[...]
+$ echo $?
+7
+```
+
 ### Option `-v`: tracé d'une ligne verticale
 
-L'option `-h` permet de tracer une ligne verticale occupant la haute de tout le
+L'option `-v` permet de tracer une ligne verticale occupant la haute de tout le
 canevas:
 
 ```sh
@@ -169,6 +184,20 @@ $ ./canvascii -n 3,7 -v 1 -v 3 -v 5
 .7.7.7.
 .7.7.7.
 .7.7.7.
+```
+
+Comme pour l'option `-h`, si le numéro de colonne est hors canevas, un message
+d'erreur est affiché et le manuel d'utilisation est rappelé:
+
+```sh
+$ ./canvascii -n 3,5 -v 5
+Error: incorrect value with option -v
+Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]
+          [-h ROW] [-v COL] [-r ROW,COL,HEIGHT,WIDTH]
+          [-l ROW1,COL1,ROW2,COL2] [-c ROW,COL,RADIUS]
+[...]
+$ echo $?
+7
 ```
 
 ### Option `-r`: tracé d'un rectangle
@@ -196,6 +225,28 @@ $ ./canvascii -n 5,7 -r 1,1,8,8
 .7.....
 ```
 
+Les positions peuvent être négatives:
+
+```sh
+$ ./canvascii -n 5,5 -r -1,-1,3,3
+.7...
+77...
+.....
+.....
+.....
+```
+
+Mais pas les dimensions:
+
+```sh
+$ ./canvascii -n 5,5 -r 1,1,-2,-2
+Error: incorrect value with option -r
+Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]
+          [-h ROW] [-v COL] [-r ROW,COL,HEIGHT,WIDTH]
+          [-l ROW1,COL1,ROW2,COL2] [-c ROW,COL,RADIUS]
+[...]
+```
+
 ### Option `-l`: tracé d'un segment
 
 Il est possible de tracer un segment discret avec l'option `-l`:
@@ -218,6 +269,17 @@ $ ./canvascii -n 4,10 -l 1,1,4,11
 .77.......
 ...777....
 ......7777
+```
+
+Les positions avec des valeurs négatives sont acceptées:
+
+```sh
+$ ./canvascii -n 5,5 -l -2,6,6,-2
+....7
+...7.
+..7..
+.7...
+7....
 ```
 
 L'algorithme utilisé pour tracer un segment discret est appelé [Algorithme de
@@ -256,6 +318,28 @@ $ ./canvascii -n 5,5 -c 4,4,3
 ..7..
 .7...
 .7...
+```
+
+Le centre du cercle peut avoir des coordonnées négatives:
+
+```sh
+$ ./canvascii -n 5,5 -c -1,-1,5
+....7
+....7
+...7.
+..7..
+77...
+```
+
+Mais pas son rayon:
+
+```sh
+$ ./canvascii -n 5,5 -c 1,1,-2
+Error: incorrect value with option -c
+Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]
+          [-h ROW] [-v COL] [-r ROW,COL,HEIGHT,WIDTH]
+          [-l ROW1,COL1,ROW2,COL2] [-c ROW,COL,RADIUS]
+[...]
 ```
 
 L'algorithme utilisé pour tracer un cercle discret est appelé [Algorithme de
@@ -466,8 +550,9 @@ are limited to at most 40 rows and at most 80 columns.\n\
 If no argument is provided, the program prints this help and exit.\n\
 \n\
 Canvas options:\n\
-  -n HEIGHT,WIDTH           Creates a new empty canvas of HEIGHT rows\n\
-                            and WIDTH columns. Must be used as first option.\n\
+  -n HEIGHT,WIDTH           Creates a new empty canvas of HEIGHT rows and\n\
+                            WIDTH columns. Should be used as first option,\n\
+                            otherwise, the behavior is undefined.\n\
                             Ignores stdin.\n\
   -s                        Shows the canvas and exit.\n\
   -k                        Enables colored output. Replaces characters\n\
@@ -599,14 +684,14 @@ apporter des précisions à l'ensemble de la classe si nécessaire.
 
 Les critères d'évaluation sont les suivants:
 
-  Critère                Points
-  -------------------- --------
-  Fonctionnabilité          /50
-  Qualité du code           /15
-  Documentation             /15
-  Makefile                   /5
-  Utilisation de Git        /15
-  Total                    /100
+| Critère             |  Points |
+|:--------------------|--------:|
+| Fonctionnabilité    |     /50 |
+| Qualité du code     |     /15 |
+| Documentation       |     /15 |
+| Makefile            |      /5 |
+| Utilisation de Git  |     /15 |
+| Total               |    /100 |
 
 Plus précisément, les éléments suivants seront pris en compte:
 
