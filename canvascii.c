@@ -238,7 +238,6 @@ int drawRectangle(int row, int col, int height, int width) {
         errorNo = ERR_WITH_VALUE;
     }
     
-    // TODO Return error if col or row is bad
     return errorNo;
 }
 
@@ -265,31 +264,59 @@ int drawSegment (int row1, int col1, int row2, int col2) {
     }
 }
 
+// Draws a circle with center (row, col) with radius
+int drawCircle (int row, int col, int radius) {
+    int errorNo = OK;
+
+    if (radius >= 0) {
+        int f = 1 - radius;
+        int ddF_x = 0;
+        int ddF_y = -2 * radius;
+        int x = 0;
+        int y = radius;
+ 
+        drawPixel(row, col + radius);
+        drawPixel(row, col - radius);
+        drawPixel(row + radius, col);
+        drawPixel(row - radius, col);
+ 
+        while (x < y) {
+            if (f >= 0) {
+                y--;
+                ddF_y += 2;
+                f += ddF_y;
+            }
+            x++;
+            ddF_x += 2;
+            f += ddF_x + 1;    
+            drawPixel(row + x, col + y);
+            drawPixel(row - x, col + y);
+            drawPixel(row + x, col - y);
+            drawPixel(row - x, col - y);
+            drawPixel(row + y, col + x);
+            drawPixel(row - y, col + x);
+            drawPixel(row + y, col - x);
+            drawPixel(row - y, col - x);
+        }
+    } else {
+        errorNo = ERR_WITH_VALUE;
+    }
+
+    return errorNo;
+}
+
 /*
 void parseArguments(int argc, char* argv[]) {
-
 }
 */
 
-/*
- * SI ARGUMENTS[] = 1 :
- *  AFFICHER LE MANUEL D'UTILISATION
- *
- * SI ARGUMENTS[] > 1 :
- *  CONTINUER CI-DESSOUS...
- *
- *      EST-CE QUE ARGUMENT[i] == 
- *
- * GESTION DES ERREURS :
- *  RETURN NULL
- *
- */
-
 int main(int argc, char* argv[]) {
     
-    fprintf(stdout, "CREATECANVAS(10,10) = %d\n", createCanvas(10,10));
+    fprintf(stdout, "CREATECANVAS(11,11) = %d\n", createCanvas(11,11));
 
     fprintf(stdout, "SETPEN(1) = %d\n", setPen('1'));
+
+    //fprintf(stdout, "DRAWPIXEL(0,0) = %d\n", drawPixel(0,0));
 
     //fprintf(stdout, "DRAWFULLHLINE(2) = %d\n", drawFullHLine(2));
 
@@ -303,9 +330,11 @@ int main(int argc, char* argv[]) {
 
     //fprintf(stdout, "SETPEN(5) = %d\n", setPen('5'));
 
-    fprintf(stdout, "DRAWRECT(1,1,15,15) = %d\n", drawRectangle(1, 1, 15, 15));
+    //fprintf(stdout, "DRAWRECT(1,1,15,15) = %d\n", drawRectangle(1, 1, 15, 15));
 
-    //fprintf(stdout, "DRAWSEG(1,1,9,15) = %d\n", drawSegment(1,1,9,15));
+    //fprintf(stdout, "DRAWSEG(1,1,9,15) = %d\n", drawSegment(-2,6,6,-2));
+
+    fprintf(stdout, "DRAWCIRCLE(5,5,5) = %d\n", drawCircle(-1,-1,5));
 
     printCanvas();
 
