@@ -143,21 +143,17 @@ int drawPixel(int row, int col) {
         }
     }
 
-    // TODO Return error or not ?
     return errorNo;
 }
 
-// Validates a row number based on canvas size
+// Validates a row number based on canvas height
 int validateRow(int row) {
     int errorNo = OK;
 
-    if ((row < MIN_HEIGHT) || (row > MAX_HEIGHT)) {
-        errorNo = ERR_WITH_VALUE;
-    } else if (row > canvas.height) {
+    if (!isInRange(row, 0, canvas.height)) {
         errorNo = ERR_WITH_VALUE;
     }
 
-    // TODO Remove MIN_HEIGHT because unsigned int ?
     return errorNo;
 }
 
@@ -193,13 +189,10 @@ int drawHLine(int row, int colBegin, int colEnd) {
 int validateColumn(int col) {
     int errorNo = OK;
 
-    if ((col < MIN_WIDTH) || (col > MAX_WIDTH)) {
-        errorNo = ERR_WITH_VALUE;
-    } else if (col > canvas.width) { 
+    if (!isInRange(col, 0, canvas.width)) {
         errorNo = ERR_WITH_VALUE;
     }
-
-    // TODO Remove MIN_WIDTH because unsigned int ? 
+ 
     return errorNo;
 }
 
