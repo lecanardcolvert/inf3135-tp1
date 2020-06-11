@@ -1,4 +1,6 @@
+#define MIN_HEIGHT 0
 #define MAX_HEIGHT 40
+#define MIN_WIDTH 0
 #define MAX_WIDTH 80
 #define USAGE "\
 Usage: %s [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]\n\
@@ -35,14 +37,17 @@ Drawing options:\n\
                             radius RADIUS with the midpoint algorithm.\n\
 "
 
-struct canvas {
+struct Canvas {
     char pixels[MAX_HEIGHT][MAX_WIDTH]; // A matrix of pixels
-    unsigned int width;                 // Its width
     unsigned int height;                // Its height
+    unsigned int width;                 // Its width
     char pen;                           // The character we are drawing with
 };
 
+const char penList[] = "01234567";
+
 enum error {
+    ERR_BAD_INPUT              = -1,// For functions that return a value
     OK                         = 0, // Everything is ok
     ERR_WRONG_PIXEL            = 1, // Wrong pixel value in canvas
     ERR_CANVAS_TOO_HIGH        = 2, // Canvas is too high
@@ -53,3 +58,13 @@ enum error {
     ERR_WITH_VALUE             = 7  // Problem with value
 };
 
+const char* errorMsg[8] = {
+    "Everything is OK\n\0",
+    "Wrong pixel value in canvas\n\0",
+    "Canvas is too high\n\0",
+    "Canvas is too wide\n\0",
+    "Canvas is non rectangular\n\0",
+    "Unrecognized option\n\0",
+    "Option with missing value\n\0",
+    "Problem with value\n\0"
+};
