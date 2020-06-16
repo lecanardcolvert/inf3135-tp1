@@ -91,6 +91,6 @@ remise, vous pouvez supprimer ce paragraphe).
 * [ ] Le nombre de tests qui réussissent/échouent avec la `make test` est
   indiqué quelque part dans le fichier `README.md`.
 * [ ] Les sections incomplètes de ce fichier (`README.md`) ont été complétées.
-* [ ] L'en-tête du fichier est documentée.
-* [ ] L'en-tête des déclarations des fonctions est documentée (*docstring*).
+* [x] L'en-tête du fichier est documentée.
+* [x] L'en-tête des déclarations des fonctions est documentée (*docstring*).
 * [ ] Le programme ne contient pas de valeurs magiques.
