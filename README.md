@@ -33,10 +33,17 @@ lisibilité avec un éditeur de texte.
 ## Description
 
 Décrivez ici le projet. Commencez d'abord par une description générale, puis
-donnez ensuite des détails. Indiquez le contexte dans lequel ce travail est
-accompli (cours, sigle, enseignant, université).
+donnez ensuite des détails. 
 
-Aussi, insérer un lien vers le [sujet du travail](sujet.md).
+Le logiciel canvascii.c permet de dessiner sur un canvas ASCII. Le canvas peut être initialisé ou lu sur l'entrée standard. Ensuite, il est possible de dessiner sur ce canvas. Le résultat est affiché ensuite sur la sortie standard.
+
+=== À REMPLIR ===
+
+Ce logiciel a été conçu et développé dans le cadre du cours [INF3135 Construction et maintenance de logiciels](https://etudier.uqam.ca/cours?sigle=INF3135).
+
+Le cours est enseigné par Alexandre Blondin Massé, professeur au [département d'informatique](http://info.uqam.ca/), à [l'Université du Québec à Montréal](https://uqam.ca/).
+
+Le sujet du travail se trouve [ici](sujet.md).
 
 ## Auteur
 
@@ -44,11 +51,68 @@ Alexandre Hamel Bourdeau (HAMA12128907)
 
 ## Fonctionnement
 
-Expliquez d'abord en mots comment faire fonctionner le projet (imaginez que la
-personne qui l'utilisera ne connaît pas C, ne connaît pas le projet et souhaite
-seulement saisir une série de commandes pour l'exécuter). En particulier,
-indiquez les commandes qui doivent être entrées pour la compilation et
-l'exécution.
+Le logiciel est codé en language C. Il faut le compiler avant de pouvoir l'exécuter.
+
+### Compilation
+
+* Repérer le répertoire du projet
+* Accéder à ce répertoire en utilisant le terminal
+* Lancer la commande `make`
+
+Exemple :
+
+```sh
+$ make
+gcc -o canvascii -std=11 -Wall -Wextra canvascii.c
+$
+```
+
+Le logiciel est compilé. Le fichier `canvascii` devrait apparaître dans le répertoire du projet. Vous pouvez vérifier à l'aide de la commande `ls`.
+
+### Exécution
+
+Dans le répertoire du projet, lancer la commande `./canvascii` suivi des options désirées, séparées par des espaces.
+
+Les options du canvas sont celles-ci :
+
+```text
+-n HEIGHT,WIDTH     Crée un nouveau canvas de hauteur HEIGHT et de largeur WIDTH.
+                    Doit être spécifié en premier, ou sinon le comportement n'est pas défini.
+                    Ignore l'entrée (stdin).
+
+-s                  Affiche le canvas, puis le lelogiciel termine.
+-k                  Affiche le canvas en couleur, en replacant les pixels (de 0 à 7) par leur code ANSI correspondant.
+```
+
+Les options de dessin :
+```text
+-p CHAR                     Sélectionne un nouveau crayon. CHAR doit être de valeur 0, 1, 2, 3, 4, 5, 6 ou 7.
+                            Le crayon par défaut est 7.
+
+-h ROW                      Dessine une ligne horizontale sur ROW.
+
+-v COL                      Dessine une ligne verticale sur COL.
+
+-r ROW,COL,HEIGHT,WIDTH     Dessine un rectangle de hauteur HEIGHT et de largeur WIDTH.
+                            Le coin en haut à gauche se trouve aux coordonnées (ROW, COL).
+                            
+-l ROW1,COL1,ROW2,COL2      Dessine un segment des coordonnées (ROW1, COL1) jusqu'à (ROW2, COL2) en utilisant l'algorithme de 
+                            Bresenham.
+                            
+-c ROW,COL,RADIUS           Dessine un cercle. Le point du centre se trouve à (ROW, COL) et son rayon est défini par RADIUS.          
+```
+Lorsque aucune option n'est spécifiée, alors le guide d'utilisation est affiché à l'écran.
+
+Exemple d'un dessin d'une ligne horizontale et d'une ligne verticale de différentes couleurs :
+
+```sh
+$ ./canvascii -n 5,5 -p 4 -h 2 -p 2 -v 2
+..2..
+..2..
+44244
+..2..
+..2..
+```
 
 ## Tests
 
