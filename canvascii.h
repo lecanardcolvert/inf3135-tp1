@@ -44,7 +44,8 @@ struct Canvas {
     char pen;                           // The character we are drawing with
 };
 
-const char penList[] = "01234567";
+const char EMPTY_PIXEL = '.';
+const char PEN_LIST[8] = "01234567";
 
 enum error {
     ERR_BAD_INPUT              = -1,// For functions that return a value
@@ -58,7 +59,7 @@ enum error {
     ERR_WITH_VALUE             = 7  // Problem with value
 };
 
-const char* errorMsg[8] = {
+const char *ERROR_MSG[8] = {
     "Everything is OK\n\0",
     "Wrong pixel value in canvas\n\0",
     "Canvas is too high\n\0",
@@ -68,3 +69,42 @@ const char* errorMsg[8] = {
     "Option with missing value\n\0",
     "Problem with value\n\0"
 };
+
+const char *OPT_NEW_CANVAS = "-n";
+const char *OPT_PRINT_CANVAS = "-s";
+const char *OPT_ENABLE_COLORS = "-k";
+const char *OPT_SET_PEN = "-p";
+const char *OPT_DRAW_HLINE = "-h";
+const char *OPT_DRAW_VLINE = "-v";
+const char *OPT_DRAW_RECT = "-r";
+const char *OPT_DRAW_SEGMENT = "-l";
+const char *OPT_DRAW_CIRCLE = "-c";
+
+int validateStrToInt(char str[]);
+int strToInt(char str[]);
+char *fgetstr(char *string, int n, FILE *stream);
+
+int min(int int1, int int2);
+int max(int int1, int int2);
+bool isInRange(int value, int lowerLimit, int upperLimit);
+
+void fillCanvas();
+int validateCanvasSize(int height, int width);
+int newCanvas(int height, int width);
+int validatePixel(char pixel);
+int importCanvas();
+void printCanvas();
+int validatePen(char pen);
+int setPen(char pen);
+void drawPixel(int row, int col);
+int validateRow(int row);
+int drawFullHLIne(int row);
+void drawHLIne(int row, int colBegin, int colEnd);
+int validateColumn(int col);
+int drawFullVLine(int col);
+void drawVLine(int col, int rowBegin, int rowEnd);
+int drawRectangle(int row, int col, int height, int width);
+void drawSegment(int row1, int col1, int row2, int col2);
+int drawCircle(int row, int col, int radius);
+
+int parseArguments(int argc, char *argv[]);
