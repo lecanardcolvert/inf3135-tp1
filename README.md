@@ -2,42 +2,11 @@
 title: "Travail pratique 1: Dessiner sur un canevas ASCII"
 ---
 
-## Format Markdown (supprimer cette section avant la remise)
-
-N'oubliez pas de bien exploiter le format Markdown.
-
-Sauter une ligne pour changer de paragraphe.
-
-Mettre les noms de fichier et bout de code courts entre apostrophes inversés.
-Par exemple, si vous parlez du fichier `Makefile`.
-
-Mettre les longs bouts de code dans des blocs de code (triples apostrophes
-inversés). Par exemple, vous pouvez donner un exemple de commande comme suit:
-
-```sh
-$ make
-$ ls -a
-```
-
-Utiliser des listes à puces ou des énumérations le plus possible (plus agréable
-à lire). Par exemple, pour décrire le contenu du projet:
-
-* `README.md`: ce fichier
-* `Makefile`: permet d'automatiser la compilation
-* etc.
-
-Bien aérer le contenu du fichier source (`README.md`). Éviter les longues
-lignes dans le fichier Markdown (par exemple, limiter à 80) pour une meilleure
-lisibilité avec un éditeur de texte.
-
 ## Description
 
-Décrivez ici le projet. Commencez d'abord par une description générale, puis
-donnez ensuite des détails. 
+Le logiciel canvascii.c permet de dessiner sur un canvas ASCII. Le canvas peut être initialisé ou lu sur l'entrée standard. Ensuite, il est possible de dessiner de plusieurs façons sur un canvas. Le résultat est affiché ensuite sur la sortie standard.
 
-Le logiciel canvascii.c permet de dessiner sur un canvas ASCII. Le canvas peut être initialisé ou lu sur l'entrée standard. Ensuite, il est possible de dessiner sur ce canvas. Le résultat est affiché ensuite sur la sortie standard.
-
-=== À REMPLIR ===
+Pour plus de détails sur les fonctions de dessin, consulter la section [Exécution](#exécution).
 
 Ce logiciel a été conçu et développé dans le cadre du cours [INF3135 Construction et maintenance de logiciels](https://etudier.uqam.ca/cours?sigle=INF3135).
 
@@ -57,7 +26,7 @@ Le logiciel est codé en language C. Il faut le compiler avant de pouvoir l'exé
 
 * Repérer le répertoire du projet
 * Accéder à ce répertoire en utilisant le terminal
-* Lancer la commande `make`
+* Lancer la commande `make`.
 
 Exemple :
 
@@ -124,7 +93,56 @@ $ ./canvascii -n 5,5 -p 4 -h 2 -p 2 -v 2
 
 Exemple :
 
-=== COMPLÉTER ===
+```sh
+$ make test
+bats check.bats
+ ✓ With no argument, shows help
+ ✓ Creating an empty 3x2 canvas
+ ✓ Maximum allowed size is 40x80
+ ✓ Loading and prints an empty 5x8 canvas
+ ✓ Using all pens between 0 and 7
+ ✓ Drawing horizontal line on 5x8 canvas with option -h
+ ✓ Drawing vertical line on 5x8 canvas with option -v
+ ✓ Drawing rectangle on 5x8 canvas with option -r
+ ✓ Drawing line on 5x5 canvas with option -l
+ ✓ Drawing circle on 5x8 canvas with option -c
+ ✓ Combining multiple options
+ ✓ Drawing non diagonal segment
+ ✓ Drawing large circle
+ ✓ Clipping line from (1,1) to (5,8)
+ ✓ Clipping circle of radius 3 centered at (3,3)
+ ✓ Option -k is recognized
+ ✓ Forbidding character # in canvas
+ ✓ Canvas of 41 lines is too high
+ ✓ Canvas of 81 columns is too wide
+ ✓ Width must be uniform for all lines
+ ✓ Unrecognized option -a
+ ✗ Option -n must be provided with values
+   (in test file check.bats, line 186)
+     `[ "$status" -eq 6 ]' failed with status 7
+ ✗ Wrong value with option -p
+   (in test file check.bats, line 194)
+     `[ "${lines[0]}" = "Error: incorrect value with option -p" ]' failed with status 7
+ ✓ Wrong value with option -h
+ ✗ Wrong value with option -v
+   (in test file check.bats, line 207)
+     `[ "$status" -eq 7 ]' failed
+ ✗ Wrong syntax with option -n
+   (in test file check.bats, line 215)
+     `[ "${lines[0]}" = "Error: incorrect value with option -n" ]' failed with status 7
+ ✓ Wrong dimensions with option -n
+ ✓ Negative value with option -h is forbidden
+ ✓ Negative value with option -v is forbidden
+ ✓ Negative positions with option -r are allowed
+ ✓ Negative dimensions with option -r are forbidden
+ ✓ Negative positions with option -l are allowed
+ ✓ Negative positions with option -c are allowed
+ ✓ Negative radius with option -c is forbidden
+
+34 tests, 4 failures
+
+make: *** [Makefile:15: test] Error 1
+```
 
 ## Dépendances
 
