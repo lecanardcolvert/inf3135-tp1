@@ -23,7 +23,6 @@
 #include "canvascii.h"
 
 struct Canvas canvas;
-char importedCanvas[MAX_HEIGHT][MAX_WIDTH];
 bool colorPrint = false;
 
 /*
@@ -297,23 +296,71 @@ void importCanvas() {
 }
 
 /*
- * Enables printing in color mode
+ * Gets the color code for a pen
  *
+ * @param   pen     Pen to look for
+ *          *color  String where to store the color code
+ */
+void getPenColor(char pen, char *color) {
+    for (int i = 0; i < PENS_SIZE; i++) {
+        if (pen - '0' == PENS[i].pen) {
+            strcpy(color, PENS[i].color);
+        }
+    }
+}
+
+/*
+ * Enables printing in color mode
  */
 void enableColorPrint() {
     colorPrint = true;
 }
 
 /*
- * Prints the canvas on console (stdout)
+ * Prints the canvas on console (stdout) with colors
  *
  */
-void printCanvas() {
+void colorPrintCanvas() {
+    for (unsigned int i = 0; i < canvas.height; i++) {
+        for (unsigned int j = 0; j < canvas.width; j++) {
+            char pixel = canvas.pixels[i][j];
+            char color[10];
+
+	        if (pixel != EMPTY_PIXEL) {
+            	getPenColor(pixel, color);
+    		} else {
+            	strcpy(color, RESET_COLOR);
+	            pixel = ' ';
+            }
+            fprintf(stdout, "%s", color);
+            fprintf(stdout, "%c", pixel);
+        }
+        fprintf(stdout, "%s", RESET_COLOR); 
+        fprintf(stdout, "\n");
+    }
+    printf("%s", RESET_COLOR);
+}
+
+/*
+ * Prints the canvas on console (stdout) without colors
+ */
+void normalPrintCanvas() {
     for (unsigned int i = 0; i < canvas.height; i++) {
         for (unsigned int j = 0; j < canvas.width; j++) {
             fprintf(stdout, "%c", canvas.pixels[i][j]);
         }
         fprintf(stdout, "\n");
+    }
+}
+
+/*
+ * Calls the normal printing mode or color printing mode
+ */
+void printCanvas() {
+    if (colorPrint == true) {
+        colorPrintCanvas();
+    } else {
+        normalPrintCanvas();
     }
 }
 
@@ -326,8 +373,8 @@ void printCanvas() {
 int validatePen(int pen) {
     int errorNo = ERR_WITH_VALUE;
 
-    for (int i = 0; i < PEN_SIZE; i++) {
-        if (pen == PEN_LIST[i]) {
+    for (int i = 0; i < PENS_SIZE; i++) {
+        if (pen == PENS[i].pen) {
             errorNo = OK;
             break;
         }

@@ -46,8 +46,20 @@ struct Canvas {
 };
 
 const char EMPTY_PIXEL = '.';
-const int PEN_SIZE = 8;
-const int PEN_LIST[8] = {0, 1, 2, 3, 4, 5, 6, 7};
+
+struct Pen {
+    int pen;
+    char *color;
+};
+
+const int PENS_SIZE = 8;
+const struct Pen PENS[8] = {
+    {0, "\033[30;40m"}, {1, "\033[31;41m"},
+    {2, "\033[32;42m"}, {3, "\033[33;43m"},
+    {4, "\033[34;44m"}, {5, "\033[35;45m"},
+    {6, "\033[36;46m"}, {7, "\033[37;47m"}
+};
+const char *RESET_COLOR = "\033[0m";
 
 enum error {
     ERR_BAD_INPUT              = -1,// For functions that return a value
@@ -76,7 +88,6 @@ struct Options {
     const char option;
     const int noArgs;
 };
-
 const int NO_ARGUMENT_MAX = 4;
 const char OPTION_PREFIX = '-';
 const int OPTIONS_SIZE = 9;
@@ -100,6 +111,8 @@ int validatePixelLine(char *str);
 char *fgetstr(char *string, int n, FILE *stream);
 void importCanvas();
 void enableColorPrint();
+void colorPrintCanvas();
+void normalPrintCanvas();
 void printCanvas();
 int validatePen(int pen);
 void setPen(int pen);
@@ -113,4 +126,9 @@ void drawVLine(int col, int rowBegin, int rowEnd);
 void drawRectangle(int row, int col, int height, int width);
 void drawSegment(int row1, int col1, int row2, int col2);
 void drawCircle(int row, int col, int radius);
-// TODO Complete the rest of the functions
+void parseArgument(const char *str, int noValues, int *values);
+int parseOption(const char *strOpt, char *opt);
+int validateOption(const char *strOpt, char *opt);
+int getNoArgsRequired(const char *strOpt, char *opt);
+void callFunction(const char opt, const int optp, int *args);
+void parseProgramArguments(const int argc, char* argv[]);
