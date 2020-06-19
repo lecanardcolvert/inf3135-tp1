@@ -41,11 +41,12 @@ struct Canvas {
     char pixels[MAX_HEIGHT][MAX_WIDTH]; // A matrix of pixels
     unsigned int height;                // Its height
     unsigned int width;                 // Its width
-    char pen;                           // The character we are drawing with
+    int pen;                            // The character we are drawing with
 };
 
 const char EMPTY_PIXEL = '.';
-const char PEN_LIST[8] = "01234567";
+const int PEN_SIZE = 8;
+const int PEN_LIST[8] = {0, 1, 2, 3, 4, 5, 6, 7};
 
 enum error {
     ERR_BAD_INPUT              = -1,// For functions that return a value
@@ -61,7 +62,7 @@ enum error {
 
 const char *ERROR_MSG[8] = {
     "Everything is OK\n\0",
-    "Wrong pixel value in canvas\n\0",
+    "Wrong pixel value\n\0",
     "Canvas is too high\n\0",
     "Canvas is too wide\n\0",
     "Canvas is non rectangular\n\0",
@@ -70,41 +71,45 @@ const char *ERROR_MSG[8] = {
     "Problem with value\n\0"
 };
 
-const char *OPT_NEW_CANVAS = "-n";
-const char *OPT_PRINT_CANVAS = "-s";
-const char *OPT_ENABLE_COLORS = "-k";
-const char *OPT_SET_PEN = "-p";
-const char *OPT_DRAW_HLINE = "-h";
-const char *OPT_DRAW_VLINE = "-v";
-const char *OPT_DRAW_RECT = "-r";
-const char *OPT_DRAW_SEGMENT = "-l";
-const char *OPT_DRAW_CIRCLE = "-c";
+struct Options {
+    const char option;
+    const int noArgs;
+};
 
-int validateStrToInt(char str[]);
-int strToInt(char str[]);
-char *fgetstr(char *string, int n, FILE *stream);
+const int NO_ARGUMENT_MAX = 4;
+const char OPTION_PREFIX = '-';
+const int OPTIONS_SIZE = 9;
+const struct Options OPTIONS[] = {
+    {'k', 0}, {'s', 0}, {'h', 1}, {'p', 1}, {'v', 1}, {'n', 2}, {'c', 3},
+    {'l', 4}, {'r', 4}
+};
 
+void printUsage();
+void closeProgram(int errorNo);
 int min(int int1, int int2);
 int max(int int1, int int2);
 bool isInRange(int value, int lowerLimit, int upperLimit);
-
+int validateStrToInt(char str[]);
+int strToInt(char str[]);
 void fillCanvas();
 int validateCanvasSize(int height, int width);
-int newCanvas(int height, int width);
+void newCanvas(int height, int width);
 int validatePixel(char pixel);
-int importCanvas();
+int validatePixelLine(char *str);
+char *fgetstr(char *string, int n, FILE *stream);
+void importCanvas();
+void enableColorPrint();
 void printCanvas();
-int validatePen(char pen);
-int setPen(char pen);
-void drawPixel(int row, int col);
+int validatePen(int pen);
+void setPen(int pen);
+int drawPixel(int row, int col);
 int validateRow(int row);
-int drawFullHLIne(int row);
+void drawFullHLine(int row);
 void drawHLIne(int row, int colBegin, int colEnd);
 int validateColumn(int col);
-int drawFullVLine(int col);
+void drawFullVLine(int col);
 void drawVLine(int col, int rowBegin, int rowEnd);
-int drawRectangle(int row, int col, int height, int width);
+void drawRectangle(int row, int col, int height, int width);
 void drawSegment(int row1, int col1, int row2, int col2);
-int drawCircle(int row, int col, int radius);
-
-int parseArguments(int argc, char *argv[]);
+void drawCircle(int row, int col, int radius);
+// TODO Complete the rest of the functions

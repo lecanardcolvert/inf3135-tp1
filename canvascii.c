@@ -26,7 +26,6 @@ struct Canvas canvas;
 char importedCanvas[MAX_HEIGHT][MAX_WIDTH];
 bool colorPrint = false;
 
-// TODO Complete this function
 /*
  * Prints the manual on the console.
  */
@@ -34,43 +33,23 @@ void printUsage() {
     fprintf(stdout, "%s", USAGE);
 }
 
-// TODO Complete this function
+// TODO Complete function
 /* 
  * Prints the error message and the manual, then closes the program
  */
 void closeProgram(int errorNo) {
-    fprintf(stderr, "%s", ERROR_MSG[errorNo]);
-    fprintf(stderr, "%s", USAGE);
-}
-
-/*
- * fgetstr() - mimics behavior of fgets(), but 
- * removes new-line character at end of line if it exists
- *
- * @param   *string The string where to store characters
- *          n       Maximum of characters to be read
- *          *STREAM Pointer to FILE where to read stream from (stdin)
- * @returns The string read from the stream, until EOF is encountered
- * @see     fgets
- */
-char *fgetstr(char *string, int n, FILE *stream)
-{
-	char *result;
-	result = fgets(string, n, stream);
-	if(!result)
-		return(result);
-
-	if(string[strlen(string) - 1] == '\n')
-		string[strlen(string) - 1] = 0;
-
-	return(string);
+    if (errorNo != OK) {
+        fprintf(stderr, "%s", ERROR_MSG[errorNo]);
+        fprintf(stderr, "%s", USAGE);
+    }
+    exit(errorNo);
 }
 
 /*
  * Returns the minimum between two integers
  *
- * @param   int1  The first int to compare
- * @param   int2  The second int to compare
+ * @param   int1  First int to compare
+ *          int2  Second int to compare
  * @return  An int which is the minimum
  */
 int min(int int1, int int2) {
@@ -80,8 +59,8 @@ int min(int int1, int int2) {
 /*
  * Returns the maximum between two integers
  *
- * @param   int1    The first int to compare
- * @param   int2    The second int to compare
+ * @param   int1    First int to compare
+ *          int2    Second int to compare
  * @return  An int which is the maximum
  */
 int max(int int1, int int2) {
@@ -91,8 +70,8 @@ int max(int int1, int int2) {
 /*
  * Tells if a number is in the range (inclusive) of two numbers
  *
- * @param   lowerLimit  The lower boundary
- * @param   upperLimit  The upper boundary
+ * @param   lowerLimit  Lower boundary
+ *          upperLimit  Upper boundary
  * @return  TRUE if the number is between both inclusive boundaries,
  *          FALSE if not
  */
@@ -103,15 +82,16 @@ bool isInRange(int value, int lowerLimit, int upperLimit) {
 /*
  * Validates if a string is a number
  *
- * @param   *str    The input string
+ * @param   *str    Input string
  * @returns OK if string is a number,
  *          ERR_BAD_INPUT if not
  */
 int validateStrToInt(char *str) {
     int errorNo = OK;
-    unsigned int strLength = strlen(str);
 
     if (str != NULL) {
+        unsigned int strLength = strlen(str);
+
         for (unsigned int i = 0; i < strLength; i++) {
             if (!isdigit(str[i])) {
                 errorNo = ERR_BAD_INPUT;
@@ -126,9 +106,10 @@ int validateStrToInt(char *str) {
 /*
  * Converts a string to an int
  *
- * @param   *str    The input string
- * @returns The converted int if the validation is succesful,
+ * @param   *str    Input string
+ * @returns Converted int if the validation is succesful,
  *          ERR_BAD_INPUT if there is an error
+ * @see     validateStrToInt
  */
 int strToInt(char *str) {
     int errorNo = validateStrToInt(str);
@@ -141,50 +122,8 @@ int strToInt(char *str) {
     return value;
 }
 
-// TODO Complete function
 /*
- * Parses a string separated by commas into an int array
- *
- * @param   *str    The input string
- * @param   noArgs  The number of tokens to extract
- * @param   *values The int array to store the results
- * @returns OK if no errors,
- *          ERR_BAD_INPUT if there is an error.
- *          The data is saved in *values.
- */
-int parseIntArgs(char *str, int noArgs, int *values) {
-    const char *SEPARATOR = ",";
-    char *token;
-    int errorNo = OK;
-    int i = 0;
-   
-    if ((str != NULL) || (values != NULL)) {
-        if (noArgs > 0 && strchr(str, *SEPARATOR) != NULL) {
-            // Parse first token first
-            token = strtok(str, SEPARATOR);
-            if (strToInt(token) != -1) {
-                values[i] = strToInt(token);
-                i++;
-            }
-
-            // Parse next tokens
-            while ((token != NULL) && (i < noArgs)) {
-                token = strtok(NULL, SEPARATOR);
-                if (strToInt(token) != -1) {
-                    values[i] = strToInt(token);
-                    i++;
-                }
-            }
-        }
-    } else {
-        errorNo = ERR_BAD_INPUT;
-    }
-
-    return errorNo;
-}
-
-/*
- * Fills a new canvas with the empty pixel
+ * Fills a new canvas with an empty pixel
  */
 void fillCanvas() {
     for (unsigned int i = 0; i < canvas.height; i++) {
@@ -197,8 +136,8 @@ void fillCanvas() {
 /*
  * Validates the size of a new canvas
  *
- * @param   height  The height
- * @param   width   The width
+ * @param   height  Height
+ *          width   Width
  * @returns OK if no error,
  *          ERR_CANVAS_TOO_HIGH if too high,
  *          ERR_CANVAS_TOO_WIDE if too wide,
@@ -220,13 +159,13 @@ int validateCanvasSize(int height, int width) {
 
 // TODO Complete function
 /* 
- * Creates a new empty canvas and fills it with empty pixels
+ * Creates a new empty canvas and fills it with empty pixels.
+ * The program terminates if the canvas is too big
  *
- * @param   height  The height
- * @param   width   The width
- * @returns see function validateCanvasSize
+ * @param   height  Height
+ *          width   Width
  */
-int newCanvas(int height, int width) {
+void newCanvas(int height, int width) {
     int errorNo = validateCanvasSize(height, width);
 
     if (errorNo == OK) {
@@ -234,18 +173,18 @@ int newCanvas(int height, int width) {
         canvas.width = width;
         canvas.pen = 7;
         // TODO Change fillCanvas(); position
-        // fillCanvas();
+        fillCanvas();
+    } else {
+        closeProgram(errorNo);
     }
-
-    return errorNo;
 }
 
 /*
- * Validates the value of a pixel.
+ * Validates the value of a pixel
  * Must be either a valid pen or the empty pixel
  *
- * @param   pixel   The pixel to validate
- * @returns OK if valid,
+ * @param   pixel   Pixel to validate
+ * @returns OK if pixel is valid,
  *          ERR_WRONG_PIXEL if invalid
  */
 int validatePixel(char pixel) {
@@ -261,7 +200,7 @@ int validatePixel(char pixel) {
 /* 
  * Validates the value of pixels of a string
  *
- * @param   *str    The line to validate
+ * @param   *str    Line to validate
  * @returns OK if all pixels are valid,
  *          ERR_WRONG_PIXEL if one pixel is invalid.
  * @see     validatePixel
@@ -281,16 +220,38 @@ int validatePixelLine(char *str) {
 }
 
 /*
+ * fgetstr() - mimics behavior of fgets(), but 
+ * removes new-line character at end of line if it exists
+ *
+ * @param   *string String where to store characters
+ *          n       Maximum of characters to be read
+ *          *STREAM Pointer to FILE where to read stream from (stdin)
+ * @returns String read from the stream, until EOF is encountered
+ * @see     fgets
+ */
+char *fgetstr(char *string, int n, FILE *stream)
+{
+	char *result;
+	result = fgets(string, n, stream);
+	if(!result)
+		return(result);
+
+	if(string[strlen(string) - 1] == '\n')
+		string[strlen(string) - 1] = 0;
+
+	return(string);
+}
+
+/*
  * Imports an canvas from stdin input
+ * The program terminates if the canvas is too big, not rectangular, or
+ * if there is an invalid pixel
  *
  * @param   Reads from stdin
- * @returns ERR_CANVAS_TOO_HIGH if read canvas is too high,
- *          ERR_CANVAS_TOO_WIDE if read canvas is too wide,
- *          ERR_CANVAS_NON_RECTANGULAR if canvas rows aren't same length,
- *          ERR_WRONG_PIXEL if a pixel is invalid
- *  @see    validatePixelLine
+ *
+ * @see     validatePixelLine
  */
-int importCanvas() {
+void importCanvas() {
     int errorNo = OK;
     unsigned int row = 0;
     char buffer[MAX_WIDTH + 2];
@@ -317,11 +278,23 @@ int importCanvas() {
         row++;
     }
 
-      return errorNo;
+    if (errorNo != OK) {
+        closeProgram(errorNo);
+    }
+}
+
+/*
+ * Enables printing in color mode
+ *
+ */
+void enableColorPrint() {
+    colorPrint = true;
 }
 
 /*
  * Prints the canvas on console (stdout)
+ * Then, the program terminates
+ *
  */
 void printCanvas() {
     for (unsigned int i = 0; i < canvas.height; i++) {
@@ -330,53 +303,63 @@ void printCanvas() {
         }
         fprintf(stdout, "\n");
     }
+
+    closeProgram(OK);
 }
 
 /* Validates the value of the pen
  *
- * @param   pen The pen to validate
+ * @param   pen Number of pen to validate
  * @returns OK if pen is valid,
  *          ERR_WITH_VALUE if the pen is invalid
  */
-int validatePen(char pen) {
-    int errorNo = OK;
+int validatePen(int pen) {
+    int errorNo = ERR_WITH_VALUE;
 
-    if (strchr(PEN_LIST, pen) == NULL) {
-        errorNo = ERR_WITH_VALUE;
-    } 
+    for (int i = 0; i < PEN_SIZE; i++) {
+        if (pen == PEN_LIST[i]) {
+            errorNo = OK;
+            break;
+        }
+    }
 
     return errorNo;
 }
 
 /*
  * Sets a new pen
+ * The program terminates if an invalid pen is set
  *
  * @param   pen The pen to set
- * @returns OK if the pen is valid,
- *          ERR_WITH_VALUE if the pen is invalid
  * @see     validatePen
  */
-int setPen(char pen) {
+void setPen(int pen) {
     int errorNo = validatePen(pen);
 
     if (errorNo == OK) {
         canvas.pen = pen;
+    } else {
+        closeProgram(errorNo);
     }
-
-    return errorNo;
 }
 
 /*
- * Draws a single pixel on canvas if coordinates are inside bounds of canvas
+ * Draws a single pixel on canvas
  *
- * @param   row,col The coordinates starting from top left
+ * @param   row,col Coordinates starting from top left
+ * @returns OK if pixel is inside bounds of canvas,
+ *          ERR_WITH_VALUE if pixel is out of bounds
  */
-void drawPixel(int row, int col) {
-    if (isInRange(row, 0, canvas.height)) {
-        if (isInRange(col, 0, canvas.width)) {
-            canvas.pixels[row][col] = canvas.pen;
-        }
+int drawPixel(int row, int col) {
+    int errorNo = OK;
+
+    if (isInRange(row, 0, canvas.height) && isInRange(col, 0, canvas.width)) {
+        canvas.pixels[row][col] = canvas.pen + '0';
+    } else {
+        errorNo = ERR_WITH_VALUE;
     }
+
+    return errorNo;
 }
 
 /*
@@ -398,32 +381,29 @@ int validateRow(int row) {
 
 /*
  * Draws a horizontal line on the width of the canvas
+ * The program terminates if the row is out of bounds
  *
- * @param   row The row to draw on
- * @returns OK if the row is inside bounds of canvas,
- *          ERR_WITH_VALUE if the row is out of bounds
+ * @param   row Row to draw on
  * @see     validateRow
  */
-int drawFullHLine(int row) {
+void drawFullHLine(int row) {
     int errorNo = validateRow(row);
 
     if (errorNo == OK) {
         for (unsigned int i = 0; i < canvas.width; i++) {
             drawPixel(row, i);
         }
+    } else {
+        closeProgram(errorNo);
     }
-
-    return errorNo;
 }
 
 /*
  * Draws a horizontal line from a column to another
  *
- * @param   row         The row to draw on
- *          colBegin    The column to begin drawing
- *          colEnd      The column where to stop drawing
- * @returns OK if row is inside bounds of canvas,
- *          ERR_WITH_VALUE if row is out of bounds
+ * @param   row         Row to draw on
+ *          colBegin    Column to begin drawing
+ *          colEnd      column where to stop drawing
  * @see     validateRow
  */
 void drawHLine(int row, int colBegin, int colEnd) {
@@ -440,7 +420,7 @@ void drawHLine(int row, int colBegin, int colEnd) {
 /*
  * Validates a column number based on canvas size
  *
- * @param   col The col to draw on
+ * @param   col Column to draw on
  * @returns OK if col is inside bounds of canvas,
  *          ERR_WITH_VALUE if col is out of bounds
  */
@@ -456,32 +436,29 @@ int validateColumn(int col) {
 
 /*
  * Draws a vertical line on the height on the canvas
+ * The program terminates if the col is out of bounds
  *
- * @param   col The col to draw on
- * @returns OK if col is inside bounds of canvas,
- *          ERR_WITH_VALUE if col is out of bounds
+ * @param   col Column to draw on
  * @see     validateColumn
  */
-int drawFullVLine(int col) {
+void drawFullVLine(int col) {
     int errorNo = validateColumn(col);
 
     if (errorNo == OK) {
         for (unsigned int i = 0; i < canvas.height; i++) {
             drawPixel(i, col);
         }
+    } else {
+        closeProgram(errorNo);
     }
-
-    return errorNo;
 }
 
 /*
  * Draws a vertical line from a row to another
  *
- * @param   col         The col to draw on
- *          rowBegin    The row to begin drawing
- *          rowEnd      The row to end drawing
- * @returns OK if col is inside bounds of canvas,
- *          ERR_WITH_VALUE if col is out of bounds
+ * @param   col         Column to draw on
+ *          rowBegin    Row to begin drawing
+ *          rowEnd      Row to end drawing
  * @see     validateColumn
  */
 void drawVLine(int col, int rowBegin, int rowEnd) {
@@ -497,16 +474,13 @@ void drawVLine(int col, int rowBegin, int rowEnd) {
 
 /*
  * Draws a rectangle of (height * width) size starting from (row, col)
+ * The program terminates if a negative height or width is set
  *
- * @param   row, col        The coordinates to start drawing, from top left
- *          height          The height
- *          width           The width
- * @returns OK if height and width are greater than or equal 0,
- *          ERR_WITH_VALUE if height or width is negative
+ * @param   row, col        Coordinates to start drawing, from top left
+ *          height          Height
+ *          width           Width
  */
-int drawRectangle(int row, int col, int height, int width) {
-    int errorNo = OK;
-   
+void drawRectangle(int row, int col, int height, int width) {
     if (height > 0 && width > 0) {
         int rowEnd = row + height - 1;
         int colEnd = col + width - 1;
@@ -515,17 +489,15 @@ int drawRectangle(int row, int col, int height, int width) {
         drawHLine(row, col, colEnd);
         drawHLine(rowEnd, col, colEnd);
     } else {
-        errorNo = ERR_WITH_VALUE;
+        closeProgram(ERR_WITH_VALUE);
     }
-    
-    return errorNo;
 }
 
 /*
  * Draws a segment from a point to another
  *
- * @param   row1, col1  The coordinates to start drawing, from top left
- *          row2, col2  The coordinates to stop drawing
+ * @param   row1, col1  Coordinates to start drawing, from top left
+ *          row2, col2  Coordinates to stop drawing
  */
 void drawSegment (int row1, int col1, int row2, int col2) {
     int dx = abs(row2 - row1);
@@ -551,15 +523,12 @@ void drawSegment (int row1, int col1, int row2, int col2) {
 
 /*
  * Draws a circle
+ * The program terminates if a negative radius is set
  *
- * @param   int, col    The coordinates of the center of the circle
- *          radius      The radius, must be greater than or equal 0
- * @returns OK if radius is greater than or equal 0,
- *          ERR_WITH_VALUE if radius is negative
+ * @param   int, col    Coordinates of the center of the circle
+ *          radius      Radius that must be >= 0
  */
-int drawCircle (int row, int col, int radius) {
-    int errorNo = OK;
-
+void drawCircle (int row, int col, int radius) {
     if (radius >= 0) {
         int f = 1 - radius;
         int ddF_x = 0;
@@ -591,103 +560,197 @@ int drawCircle (int row, int col, int radius) {
             drawPixel(row - y, col - x);
         }
     } else {
-        errorNo = ERR_WITH_VALUE;
+        closeProgram(ERR_WITH_VALUE);
+    }
+}
+
+
+
+// TODO Complete function and docstring
+/*
+ * Parses a string of 1 to 4 numbers separated by commas into an array
+ * The program terminates if a different amount of values is stored
+ *
+ * @params  *str        String to read
+ *          noValues    Number of values to expect
+ *          *values     Array to store the parsed values
+ */
+void parseArgument(const char *str, int noValues, int *values) {
+    char trailing;
+    int noParsed;
+
+    if ((str != NULL) && (values != NULL)) {
+        switch (noValues) {
+            case 1 :
+                noParsed = sscanf(str, "%d%c", &values[0], &trailing);
+                break;
+            case 2 :
+                noParsed = sscanf(str, "%d,%d%c", 
+                    &values[0], &values[1], &trailing);
+                break;
+            case 3 :
+                noParsed = sscanf(str, "%d,%d,%d%c,", 
+                    &values[0], &values[1], &values[2], &trailing);
+                break;
+            case 4 :
+                noParsed = sscanf(str, "%d,%d,%d,%d%c",
+                    &values[0], &values[1], &values[2], &values[3], &trailing);
+                break;
+            default :
+                // TODO Complete this part
+                break;
+        }
+    }
+
+    if (noParsed != noValues) {
+        closeProgram(ERR_WITH_VALUE);
+    }
+}
+
+void validateArgument() {
+
+}
+
+/*
+ * Returns the number of characters of an option starting by - (ex. -%c)
+ * Stores first character of the passed option
+ *
+ * @param   *strOpt String of the option (-%c format)
+ *          *opt    Character to store
+ * @returns The number of characters parsed after (-) character
+ *          If the number > 1 then there must be an error
+ */
+int parseOption(const char *strOpt, char *opt) {
+    char trailing;
+    int noParsed;
+
+    if (strOpt != NULL) {
+        noParsed = sscanf(strOpt, "-%c%c", opt, &trailing);
+    }
+
+    return noParsed;
+}
+
+/*
+ * Validates if a specified option exists
+ * Stores character of the passed option
+ *
+ * @param       *strOpt String of the option (-%c format)
+ *              *opt    Character to store
+ * @returns     OK if specified option exists,
+ *              ERR_UNRECOGNIZED_OPTION if not
+ */
+int validateOption(const char *strOpt, char *opt) {
+    int errorNo = ERR_UNRECOGNIZED_OPTION;
+
+    if ((parseOption(strOpt, opt) == 1)) {
+        for (int i = 0; i < OPTIONS_SIZE; i++) {
+           if (*opt == OPTIONS[i].option) {
+                errorNo = OK;
+                break;
+           }
+       }
     }
 
     return errorNo;
 }
 
-// TODO Complete function
 /*
- * Parses the options and calls the functions
+ * Returns the number of arguments required for an option
+ * Stores character of the passed option
  *
- * @param   argc    The number of options
- *          *argv   The options
- *
- * @returns //TODO
+ * @param   *strOpt String of the option (-%c format)
+ *          *opt    Character to store
+ * @returns The number of arguments required for an option
+ * @see     validateOption
  */
-int parseOptions(int argc, char *argv[]) {
-    int errorNo = OK;
+int getNoArgsRequired(const char *strOpt, char *opt) {
+    int errorNo = validateOption(strOpt, opt);
+    int noArgs;
 
-    for (int i = 1; i < argc; i++) {
-        //printf("ARGV[I] = %s\n", argv[i]);
-        //printf("STRLEN ARGV = %li\n", strlen(argv[i]));
-
-        char opt[strlen(argv[i])];
-        strcpy(opt, argv[i]);
-        
-        if (argv[i+1] != NULL) {
-            //printf("ARGV[I+1] = %s\n", argv[i+1]);
-            //printf("STRLEN ARGV+1 = %li\n", strlen(argv[i+1]));
-
-            char optArgs[strlen(argv[i+1])];
-            strcpy(optArgs, argv[i+1]);
-            //int argsValues[3];
-            //parseIntArgs(optArgs, 3, argsValues);
-
-            //printf("ARGSV0 = %d, ARGSV1 = %d, ARGSV2 = %d\n====\n",
-            //        argsValues[0], argsValues[1], argsValues[2]);
+    for (int i = 0; i < OPTIONS_SIZE; i++) {
+        if (*opt == OPTIONS[i].option) {
+            noArgs = OPTIONS[i].noArgs;
+            errorNo = OK;
         }
-        
-        if ((i == 1) && (strcmp(opt, OPT_NEW_CANVAS) == 0)) {
-            // NEW CANVAS
-            printf("NEW CANVAS !\n");
-            printf("NEXT ARG = %s\n", argv[i + 1]);
-        } else if (strcmp(opt, OPT_PRINT_CANVAS) == 0) {
-            // PRINT CANVAS OK
-            printf("PRINT CANVAS !\n");
+    }
+
+    if (errorNo == ERR_UNRECOGNIZED_OPTION) {
+        closeProgram(errorNo);
+    }
+
+    return noArgs;
+}
+
+/*
+ * Calls the functions based on a character specified in the program arguments
+ *
+ * @param   opt     Option (function) wanted
+ *          *args   Array for the arguments of the options
+ */
+void callFunction(char opt, int *args) {
+    switch (opt) {
+        case 'k' :
+            enableColorPrint();
+            break;
+        case 's' :
             printCanvas();
             break;
-        } else if (strcmp(opt, OPT_ENABLE_COLORS) == 0) {
-            // COLORED INPUT OK
-            printf("ENABLE COLORS !\n");
-            colorPrint = true;
-        } else if (strcmp(opt, OPT_SET_PEN) == 0) {
-            printf("SET PEN !\n");
-            // SET PEN
-        } else if (strcmp(opt, OPT_DRAW_HLINE) == 0) {
-            // DRAW HORIZONTAL LINE
-        } else if (strcmp(opt, OPT_DRAW_VLINE) == 0) {
-            // DRAW VERTICAL LINE
-        } else if (strcmp(opt, OPT_DRAW_RECT) == 0) {
-            // DRAW RECTANGLE
-        } else if (strcmp(opt, OPT_DRAW_SEGMENT) == 0) {
-            // DRAW SEGMENT
-        } else if (strcmp(opt, OPT_DRAW_CIRCLE) == 0) {
-            // DRAW CIRCLE
-        } else {
-            // UNRECOGNIZED OPTION
-            errorNo = ERR_UNRECOGNIZED_OPTION;
+        case 'h' :
+            drawFullHLine(args[0]);
             break;
-        }
+        case 'p' :
+            setPen(args[0]);
+            break;
+        case 'v' :
+            drawFullVLine(args[0]);
+            break;
+        case 'n' :
+            newCanvas(args[0], args[1]);
+            break;
+        case 'c' :
+            drawCircle(args[0], args[1], args[2]);
+            break;
+        case 'l' :
+            drawSegment(args[0], args[1], args[2], args[3]);
+            break;
+        case 'r' :
+            drawRectangle(args[0], args[1], args[2], args[3]);
+            break;
+        default :
+            closeProgram(ERR_UNRECOGNIZED_OPTION);
+            break;
     }
-
-    return errorNo;
 }
 
-// TODO Complete function
-int main(int argc, char *argv[]) {
-    
-    //fprintf(stdout, "NEWCANVAS(11,11) = %d\n", newCanvas(11,11));
-    //fprintf(stdout, "SETPEN(1) = %d\n", setPen('1'));
-    //fprintf(stdout, "DRAWPIXEL(0,0) = %d\n", drawPixel(0,0));
-    //fprintf(stdout, "DRAWFULLHLINE(2) = %d\n", drawFullHLine(2));
-    //fprintf(stdout, "DRAWHLINE(4,1,5) = %d\n", drawHLine(4, 1, 5));
-    //fprintf(stdout, "SETPEN(7) = %d\n", setPen('7'));
-    //fprintf(stdout, "DRAWFULLVLINE(26) = %d\n", drawFullVLine(26));
-    //fprintf(stdout, "DRAWVLINE(28,2,8) = %d\n", drawVLine(28, 2, 8));
-    //fprintf(stdout, "SETPEN(5) = %d\n", setPen('5'));
-    //fprintf(stdout, "DRAWRECT(1,1,15,15) = %d\n", drawRectangle(1, 1, 15, 15));
-    //fprintf(stdout, "DRAWSEG(1,1,9,15) = %d\n", drawSegment(-2,6,6,-2));
-    //fprintf(stdout, "DRAWCIRCLE(5,5,5) = %d\n", drawCircle(-1,-1,5));
-    //printCanvas();
-    //fprintf(stdout, "IMPORTCANVAS = %d\n", importCanvas());
+/*
+ * Calls the functions based on specified arguments when running the program
+ *
+ * @param   argc    Number of arguments passed on the program
+ *          **argv  Array of arguments
+ */
+void parseProgramArguments(int argc, char* argv[]) {
+    for (int i = 1; i < argc; i++) {
+        char opt[1];
+        int noArgsRequired = getNoArgsRequired(argv[i], opt);
+        int noArgs[NO_ARGUMENT_MAX];
 
+        if (noArgsRequired == 0) {
+            callFunction(*opt, noArgs);
+        } else if (noArgsRequired > 0) {
+            parseArgument(argv[i + 1], noArgsRequired, noArgs);
+            callFunction(*opt, noArgs);
+            i++;
+        }
+    }
+}
+
+int main(int argc, char *argv[]) {
     if (argc == 1) {
         printUsage();
     } else if (argc > 1) {
-        parseOptions(argc, argv);
+        parseProgramArguments(argc, argv);
     }
 
-    return 0;
+    closeProgram(OK);
 }
