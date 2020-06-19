@@ -28,19 +28,30 @@ bool colorPrint = false;
 
 /*
  * Prints the manual on the console.
+ *
  */
 void printUsage() {
     fprintf(stdout, "%s", USAGE);
 }
 
-// TODO Complete function
 /* 
- * Prints the error message and the manual, then closes the program
+ * Terminates the program
+ * Prints the error message if there is one specified
+ * Also prints the detail of an error if there is one
+ *
+ * @param   errorNo Error number
+ *          *detail Details about the error
  */
-void closeProgram(int errorNo) {
-    if (errorNo != OK) {
+void closeProgram(int errorNo, char *detail) {
+    if (errorNo == OK) {
+        printCanvas();
+    } else {
         fprintf(stderr, "%s", ERROR_MSG[errorNo]);
-        fprintf(stderr, "%s", USAGE);
+        if (detail != NULL) {
+            fprintf(stderr, "%s", detail);
+        }
+        fprintf(stderr, "\n%s", USAGE);
+
     }
     exit(errorNo);
 }
@@ -50,7 +61,7 @@ void closeProgram(int errorNo) {
  *
  * @param   int1  First int to compare
  *          int2  Second int to compare
- * @return  An int which is the minimum
+ * @returns An int which is the minimum
  */
 int min(int int1, int int2) {
     return (int1 < int2) ? int1 : int2;
@@ -61,7 +72,7 @@ int min(int int1, int int2) {
  *
  * @param   int1    First int to compare
  *          int2    Second int to compare
- * @return  An int which is the maximum
+ * @returns An int which is the maximum
  */
 int max(int int1, int int2) {
     return (int1 > int2) ? int1 : int2;
@@ -72,7 +83,7 @@ int max(int int1, int int2) {
  *
  * @param   lowerLimit  Lower boundary
  *          upperLimit  Upper boundary
- * @return  TRUE if the number is between both inclusive boundaries,
+ * @returns TRUE if the number is between both inclusive boundaries,
  *          FALSE if not
  */
 bool isInRange(int value, int lowerLimit, int upperLimit) {
@@ -147,9 +158,9 @@ int validateCanvasSize(int height, int width) {
     int errorNo = OK;
 
     if (height > MAX_HEIGHT) {
-        errorNo = ERR_CANVAS_TOO_HIGH;
+        errorNo = ERR_WITH_VALUE;
     } else if (width > MAX_WIDTH) {
-        errorNo = ERR_CANVAS_TOO_WIDE;
+        errorNo = ERR_WITH_VALUE;
     } else if ((width < MIN_WIDTH) || (height < MIN_HEIGHT)) {
         errorNo = ERR_WITH_VALUE;
     }
@@ -157,7 +168,6 @@ int validateCanvasSize(int height, int width) {
     return errorNo;
 }
 
-// TODO Complete function
 /* 
  * Creates a new empty canvas and fills it with empty pixels.
  * The program terminates if the canvas is too big
@@ -172,10 +182,9 @@ void newCanvas(int height, int width) {
         canvas.height = height;
         canvas.width = width;
         canvas.pen = 7;
-        // TODO Change fillCanvas(); position
-        fillCanvas();
+        canvas.initialized = true;
     } else {
-        closeProgram(errorNo);
+        closeProgram(errorNo, "-n");
     }
 }
 
@@ -188,10 +197,11 @@ void newCanvas(int height, int width) {
  *          ERR_WRONG_PIXEL if invalid
  */
 int validatePixel(char pixel) {
-    int errorNo = OK;
+    int errorNo = ERR_WRONG_PIXEL;
+    int pixelInt = pixel - '0';
 
-    if ((validatePen(pixel) != OK) && (pixel != EMPTY_PIXEL)) {
-        errorNo = ERR_WRONG_PIXEL;
+    if ((pixel == EMPTY_PIXEL) || (validatePen(pixelInt) == OK)) {
+        errorNo = OK;
     }
 
     return errorNo;
@@ -253,33 +263,36 @@ char *fgetstr(char *string, int n, FILE *stream)
  */
 void importCanvas() {
     int errorNo = OK;
-    unsigned int row = 0;
+    unsigned int row = 1;
+    unsigned int col = 0;
     char buffer[MAX_WIDTH + 2];
 
     while (fgetstr(buffer, MAX_WIDTH + 2, stdin) != NULL) {
-        unsigned int bufferLength = strlen(buffer);
-        unsigned int previousRowLength = strlen(importedCanvas[row - 1]);
+        col = strlen(buffer);
+
         if (row > MAX_HEIGHT) {
             errorNo = ERR_CANVAS_TOO_HIGH;
             break;
         }
-        if (bufferLength > MAX_WIDTH) {
+        if (col > MAX_WIDTH) {
             errorNo = ERR_CANVAS_TOO_WIDE;
             break;
         }
-        if ((row > 0) && (bufferLength != previousRowLength)) {
+        if ((row > 1) && (col != strlen(canvas.pixels[row - 2]))) {
             errorNo = ERR_CANVAS_NON_RECTANGULAR;
             break;
         }
         if ((errorNo = validatePixelLine(buffer)) != OK) {
             break;
         }
-        strcpy(importedCanvas[row], buffer);
+        strcpy(canvas.pixels[row - 1], buffer);
         row++;
     }
 
-    if (errorNo != OK) {
-        closeProgram(errorNo);
+    if (errorNo == OK) {
+        newCanvas(row - 1, col);
+    } else {
+        closeProgram(errorNo, NULL);
     }
 }
 
@@ -293,7 +306,6 @@ void enableColorPrint() {
 
 /*
  * Prints the canvas on console (stdout)
- * Then, the program terminates
  *
  */
 void printCanvas() {
@@ -303,8 +315,6 @@ void printCanvas() {
         }
         fprintf(stdout, "\n");
     }
-
-    closeProgram(OK);
 }
 
 /* Validates the value of the pen
@@ -339,7 +349,7 @@ void setPen(int pen) {
     if (errorNo == OK) {
         canvas.pen = pen;
     } else {
-        closeProgram(errorNo);
+        closeProgram(errorNo, NULL);
     }
 }
 
@@ -394,7 +404,7 @@ void drawFullHLine(int row) {
             drawPixel(row, i);
         }
     } else {
-        closeProgram(errorNo);
+        closeProgram(errorNo, "-h");
     }
 }
 
@@ -449,7 +459,7 @@ void drawFullVLine(int col) {
             drawPixel(i, col);
         }
     } else {
-        closeProgram(errorNo);
+        closeProgram(errorNo, "-v");
     }
 }
 
@@ -489,7 +499,7 @@ void drawRectangle(int row, int col, int height, int width) {
         drawHLine(row, col, colEnd);
         drawHLine(rowEnd, col, colEnd);
     } else {
-        closeProgram(ERR_WITH_VALUE);
+        closeProgram(ERR_WITH_VALUE, "-r");
     }
 }
 
@@ -560,13 +570,10 @@ void drawCircle (int row, int col, int radius) {
             drawPixel(row - y, col - x);
         }
     } else {
-        closeProgram(ERR_WITH_VALUE);
+        closeProgram(ERR_WITH_VALUE, "-c");
     }
 }
 
-
-
-// TODO Complete function and docstring
 /*
  * Parses a string of 1 to 4 numbers separated by commas into an array
  * The program terminates if a different amount of values is stored
@@ -597,18 +604,13 @@ void parseArgument(const char *str, int noValues, int *values) {
                     &values[0], &values[1], &values[2], &values[3], &trailing);
                 break;
             default :
-                // TODO Complete this part
                 break;
         }
     }
 
     if (noParsed != noValues) {
-        closeProgram(ERR_WITH_VALUE);
+        closeProgram(ERR_WITH_VALUE, NULL);
     }
-}
-
-void validateArgument() {
-
 }
 
 /*
@@ -676,7 +678,9 @@ int getNoArgsRequired(const char *strOpt, char *opt) {
     }
 
     if (errorNo == ERR_UNRECOGNIZED_OPTION) {
-        closeProgram(errorNo);
+        char error[strlen(strOpt)];
+        strcpy(error, strOpt);
+        closeProgram(errorNo, error);
     }
 
     return noArgs;
@@ -686,15 +690,16 @@ int getNoArgsRequired(const char *strOpt, char *opt) {
  * Calls the functions based on a character specified in the program arguments
  *
  * @param   opt     Option (function) wanted
+ *          optp    Position of option in program arguments
  *          *args   Array for the arguments of the options
  */
-void callFunction(char opt, int *args) {
+void callFunction(const char opt, const int optp, int *args) {
     switch (opt) {
         case 'k' :
             enableColorPrint();
             break;
         case 's' :
-            printCanvas();
+            closeProgram(OK, NULL);
             break;
         case 'h' :
             drawFullHLine(args[0]);
@@ -706,7 +711,11 @@ void callFunction(char opt, int *args) {
             drawFullVLine(args[0]);
             break;
         case 'n' :
-            newCanvas(args[0], args[1]);
+            if (optp == 1) {
+                // Must be first option in program arguments to run
+                newCanvas(args[0], args[1]);
+                fillCanvas();
+            }
             break;
         case 'c' :
             drawCircle(args[0], args[1], args[2]);
@@ -718,7 +727,7 @@ void callFunction(char opt, int *args) {
             drawRectangle(args[0], args[1], args[2], args[3]);
             break;
         default :
-            closeProgram(ERR_UNRECOGNIZED_OPTION);
+            closeProgram(ERR_UNRECOGNIZED_OPTION, NULL);
             break;
     }
 }
@@ -729,28 +738,35 @@ void callFunction(char opt, int *args) {
  * @param   argc    Number of arguments passed on the program
  *          **argv  Array of arguments
  */
-void parseProgramArguments(int argc, char* argv[]) {
-    for (int i = 1; i < argc; i++) {
+void parseProgramArguments(const int argc, char* argv[]) {
+   for (int i = 1; i < argc; i++) {
         char opt[1];
         int noArgsRequired = getNoArgsRequired(argv[i], opt);
-        int noArgs[NO_ARGUMENT_MAX];
+        int args[NO_ARGUMENT_MAX];
+        //int noArgs;
+
+        if ((i == 1) && opt[0] != 'n') {
+            importCanvas();
+        }
 
         if (noArgsRequired == 0) {
-            callFunction(*opt, noArgs);
-        } else if (noArgsRequired > 0) {
-            parseArgument(argv[i + 1], noArgsRequired, noArgs);
-            callFunction(*opt, noArgs);
+            callFunction(*opt, i, args);
+        } else {
+            parseArgument(argv[i + 1], noArgsRequired, args);
+            callFunction(*opt, i, args);
             i++;
         }
     }
 }
 
 int main(int argc, char *argv[]) {
+    canvas.initialized = false;
+
     if (argc == 1) {
         printUsage();
     } else if (argc > 1) {
         parseProgramArguments(argc, argv);
     }
 
-    closeProgram(OK);
+    closeProgram(OK, NULL);
 }

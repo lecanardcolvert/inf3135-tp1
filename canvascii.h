@@ -3,7 +3,7 @@
 #define MIN_WIDTH 0
 #define MAX_WIDTH 80
 #define USAGE "\
-Usage: %s [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]\n\
+Usage: ./canvascii [-n HEIGHT,WIDTH] [-s] [-k] [-p CHAR]\n\
           [-h ROW] [-v COL] [-r ROW,COL,HEIGHT,WIDTH]\n\
           [-l ROW1,COL1,ROW2,COL2] [-c ROW,COL,RADIUS]\n\
 Draws on an ASCII canvas. The canvas is provided on stdin and\n\
@@ -42,6 +42,7 @@ struct Canvas {
     unsigned int height;                // Its height
     unsigned int width;                 // Its width
     int pen;                            // The character we are drawing with
+    bool initialized;                   // To determine if it's empty
 };
 
 const char EMPTY_PIXEL = '.';
@@ -61,14 +62,14 @@ enum error {
 };
 
 const char *ERROR_MSG[8] = {
-    "Everything is OK\n\0",
-    "Wrong pixel value\n\0",
-    "Canvas is too high\n\0",
-    "Canvas is too wide\n\0",
-    "Canvas is non rectangular\n\0",
-    "Unrecognized option\n\0",
-    "Option with missing value\n\0",
-    "Problem with value\n\0"
+    "Everything is OK\0",
+    "Error: wrong pixel value #\0",
+    "Error: canvas is too high (max height: 40)\0",
+    "Error: canvas is too wide (max width: 80)\0",
+    "Error: canvas should be rectangular\0",
+    "Error: unrecognized option \0",
+    "Error: missing value with option \0",
+    "Error: incorrect value with option \0"
 };
 
 struct Options {
@@ -85,7 +86,7 @@ const struct Options OPTIONS[] = {
 };
 
 void printUsage();
-void closeProgram(int errorNo);
+void closeProgram(int errorNo, char *detail);
 int min(int int1, int int2);
 int max(int int1, int int2);
 bool isInRange(int value, int lowerLimit, int upperLimit);
