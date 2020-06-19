@@ -64,14 +64,16 @@ Exemple :
 ```sh
 $ make
 gcc -o canvascii -std=11 -Wall -Wextra canvascii.c
-$
+$ 
 ```
 
 Le logiciel est compilé. Le fichier `canvascii` devrait apparaître dans le répertoire du projet. Vous pouvez vérifier à l'aide de la commande `ls`.
 
 ### Exécution
 
-Dans le répertoire du projet, lancer la commande `./canvascii` suivi des options désirées, séparées par des espaces.
+* Repérer le répertoire du projet
+* Accéder au répertoire en utilisant le terminal
+* Lancer la commande `./canvascii` suivi des options désirées, séparées par des espaces.
 
 Les options du canvas sont celles-ci :
 
@@ -116,8 +118,13 @@ $ ./canvascii -n 5,5 -p 4 -h 2 -p 2 -v 2
 
 ## Tests
 
-Expliquez ici comment lancer la suite de tests automatiques avec la commande
-`make test`, ainsi que le résultat que vous obtenez.
+* Repérer le répertoire du projet
+* Accéder au répertoire en utilisant le terminal
+* Lancer la commande `make test`.
+
+Exemple :
+
+=== COMPLÉTER ===
 
 ## Dépendances
 
@@ -128,7 +135,12 @@ Expliquez ici comment lancer la suite de tests automatiques avec la commande
 ## Références
 
 Ce site m'a fourni un fragment de code qui m'a permis de lire une ligne sur `fgets` et d'ignorer le retour de ligne (`\n`) :
+
 [https://www.siafoo.net/snippet/75/rev/2/embed](https://www.siafoo.net/snippet/75/rev/2/embed)
+
+Ce site m'a aidé pour trouver la façon de bien formatter les codes de couleur ANSI :
+
+[https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html#background-colors](https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html#background-colors)
 
 ## État du projet
 
@@ -150,9 +162,9 @@ remise, vous pouvez supprimer ce paragraphe).
 * [x] Le dépôt contient au moins un fichier `.gitignore`.
 * [x] Le fichier `Makefile` permet de compiler le projet lorsqu'on entre
   `make`. Il supporte les cibles `html`, `test` et `clean`.
-* [ ] Le nombre de tests qui réussissent/échouent avec la `make test` est
+* [x] Le nombre de tests qui réussissent/échouent avec la `make test` est
   indiqué quelque part dans le fichier `README.md`.
-* [ ] Les sections incomplètes de ce fichier (`README.md`) ont été complétées.
+* [x] Les sections incomplètes de ce fichier (`README.md`) ont été complétées.
 * [x] L'en-tête du fichier est documentée.
 * [x] L'en-tête des déclarations des fonctions est documentée (*docstring*).
 * [x] Le programme ne contient pas de valeurs magiques.
