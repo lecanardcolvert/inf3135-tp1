@@ -121,16 +121,14 @@ Expliquez ici comment lancer la suite de tests automatiques avec la commande
 
 ## Dépendances
 
-Indiquez les dépendances du projet, avec lien officiel. Il faudrait au moins
-mentionner GCC et [Bats](https://github.com/bats-core/bats-core). Utiliser une
-liste à puces pour donner la liste des dépendances.
+* [GCC](https://gcc.gnu.org/)
+* [Bats](https://github.com/bats-core/bats-core)
+* [Pandoc](https://pandoc.org/)
 
 ## Références
 
-Indiquez ici les références que vous avez utilisées pour compléter le projet,
-avec l'hyperlien vers la référence. Pas besoin de mentionner les diapositives
-du cours, mais si vous avez eu recours à un site d'aide, un fragment de code ou
-une discussion sur un forum, mentionnez-le.
+Ce site m'a fourni un fragment de code qui m'a permis de lire une ligne sur `fgets` et d'ignorer le retour de ligne (`\n`) :
+[https://www.siafoo.net/snippet/75/rev/2/embed](https://www.siafoo.net/snippet/75/rev/2/embed)
 
 ## État du projet
 
@@ -157,4 +155,4 @@ remise, vous pouvez supprimer ce paragraphe).
 * [ ] Les sections incomplètes de ce fichier (`README.md`) ont été complétées.
 * [x] L'en-tête du fichier est documentée.
 * [x] L'en-tête des déclarations des fonctions est documentée (*docstring*).
-* [ ] Le programme ne contient pas de valeurs magiques.
+* [x] Le programme ne contient pas de valeurs magiques.
